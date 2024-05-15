@@ -29,12 +29,18 @@ const userSchema = new Schema({
         phoneNumber: { type: String },
         email: { type: String }
     },
+    jobTitle: { type: String },
+    areasOfInterest: { type: [String], required: true }, // Array of consulting areas of interest, required
+    consultingGoals: { type: String },
+    budgetRange: { type: String },
+    preferredConsultationTimes: [ String ], // Array of preferred consultation times
+    timezone: { type: String }, // Changed to String as there is no Time type in Mongoose
+    communicationPreferences: [ String ], // Array of communication preferences
     role: {
         type: String,
         enum: ['client', 'student', 'subscriber']
     },
     profilePicture: String,
-    contactInformation: String,
     subscription: {
         status: {
             type: String,
