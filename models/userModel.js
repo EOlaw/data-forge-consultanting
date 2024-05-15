@@ -3,19 +3,31 @@ const passportLocalMongoose = require('passport-local-mongoose');
 const Schema = mongoose.Schema;
 
 const userSchema = new Schema({
-    username: {
-        type: String,
-        required: true,
-        unique: true
+    firstName: { type: String, required: true },
+    lastName: { type: String, required: true },
+    age: { type: Number, required: true },
+    gender: { type: String, required: true },
+    phoneNumber: { type: Number, required: true, unique: true },
+    email: { type: String, required: true, unique: true },
+    dateOfBirth: { type: Date, required: true },
+    address: { type: String },
+    education: { type: String, required: true },
+    employment: { type: String, required: true },
+    interest: [String], // Array of interests
+    skills: [String], // Array of skills
+    socialMediaLinks: {
+        linkedin: { type: String },
+        twitter: { type: String },
+        facebook: { type: String },
+        instagram: { type: String },
     },
-    email: {
-        type: String,
-        required: true,
-        unique: true
-    },
-    password: {
-        type: String,
-        required: true
+    preferredCommunicationChannel: { type: String },
+    languagePreferences: [ String ], // Array of languages
+    emergencyContact: {
+        name: { type: String },
+        relationship: { type: String },
+        phoneNumber: { type: String },
+        email: { type: String }
     },
     role: {
         type: String,
