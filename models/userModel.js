@@ -1,5 +1,6 @@
 const mongoose = require('mongoose');
 const passportLocalMongoose = require('passport-local-mongoose');
+const crypto = require('crypto');
 const Schema = mongoose.Schema;
 
 const userSchema = new Schema({
@@ -88,6 +89,48 @@ const userSchema = new Schema({
 }, { timestamps: true });
 
 userSchema.plugin(passportLocalMongoose);
+
+// Instance methods
+userSchema.methods.createPasswordResetToken = function() {
+    const resetToken = crypto.randomBytes(32).toString('hex')
+    this.passwordResetToken = crypto.createHash('sha256').update(resetToken).digest('hex');
+    this.passwordResetExpires = Date.now() + 10 * 60 * 1000; // 10 minutes
+};
+
+userSchema.methods.resetLoginAttempts = function() {
+    this.loginAttempts = 0;
+    this.lockUntil = undefined;
+    return this.save()
+};
+
+userSchema.methods.incrementLoginAttempts = function() {
+    const lockoutTime = 2 * 60 * 60 * 1000; // 2 hours
+    if (this.lockUntil && this.lockUntil > Date.now()) {
+        return this.save();
+    }
+    this.loginAttempts += 1;
+    if (this.loginAttempts >= 5) {
+        this.lockUntil = Date.now() + lockoutTime;
+    }
+    return this.save();
+};
+
+userSchema.methods.activateSubscription = function(subscriptionType, durationInDays) {
+    this.subscription.status = 'active';
+    this.subscription.type = subscriptionType;
+    this.subscription.startDate = new Date();
+    this.subscription.endDate = new Date(Date.now() + durationInDays * 24 * 60 * 60 * 1000);
+    return this.save();
+}
+
+// Static methods
+userSchema.statics.findByEmail = function(email) {
+    return this.findOne({ email })
+};
+
+userSchema.statics.findByPhoneNumber = function(phoneNumber) {
+    return this.findOne({ phoneNumber });
+}
 
 const User = mongoose.model('User', userSchema);
 module.exports = User;
