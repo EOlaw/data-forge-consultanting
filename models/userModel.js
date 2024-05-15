@@ -13,7 +13,7 @@ const userSchema = new Schema({
     address: { type: String },
     education: { type: String, required: true },
     employment: { type: String, required: true },
-    interest: [String], // Array of interests
+    interests: [String], // Array of interests
     skills: [String], // Array of skills
     socialMediaLinks: {
         linkedin: { type: String },
@@ -22,7 +22,7 @@ const userSchema = new Schema({
         instagram: { type: String },
     },
     preferredCommunicationChannel: { type: String },
-    languagePreferences: [ String ], // Array of languages
+    languagePreferences: [String], // Array of languages
     emergencyContact: {
         name: { type: String },
         relationship: { type: String },
@@ -33,9 +33,9 @@ const userSchema = new Schema({
     areasOfInterest: { type: [String], required: true }, // Array of consulting areas of interest, required
     consultingGoals: { type: String },
     budgetRange: { type: String },
-    preferredConsultationTimes: [ String ], // Array of preferred consultation times
+    preferredConsultationTimes: [String], // Array of preferred consultation times
     timezone: { type: String }, // Changed to String as there is no Time type in Mongoose
-    communicationPreferences: [ String ], // Array of communication preferences
+    communicationPreferences: [String], // Array of communication preferences
     role: {
         type: String,
         enum: ['client', 'student', 'subscriber']
@@ -61,10 +61,33 @@ const userSchema = new Schema({
     isAdmin: {
         type: Boolean,
         default: false
+    },
+    // New fields for authentication and security
+    passwordResetToken: String,
+    passwordResetExpires: Date,
+    twoFactorSecret: String,
+    twoFactorEnabled: {
+        type: Boolean,
+        default: false
+    },
+    loginAttempts: {
+        type: Number,
+        default: 0
+    },
+    lockUntil: Date,
+    // New fields for user preferences and settings
+    notificationPreferences: {
+        email: { type: Boolean, default: true },
+        sms: { type: Boolean, default: false },
+        push: { type: Boolean, default: false }
+    },
+    privacySettings: {
+        dataSharing: { type: Boolean, default: true },
+        profileVisibility: { type: String, enum: ['public', 'private', 'friends'], default: 'public' }
     }
 }, { timestamps: true });
 
-userSchema.plugin(passportLocalMongoose)
+userSchema.plugin(passportLocalMongoose);
 
 const User = mongoose.model('User', userSchema);
 module.exports = User;
