@@ -139,5 +139,30 @@ userSchema.statics.findByPhoneNumber = function(phoneNumber) {
     return this.findOne({ phoneNumber });
 }
 
+userSchema.methods.enableTwoFactor = async function() {
+    const secret = speakeasy.generateSecret({ length: 20 });
+    this.twoFactorSecret = secret.base32;
+    this.twoFactorEnabled = true;
+    await this.save();
+
+    const otpauthUrl = secret.otpauth_url;
+    return new Promise((resolve, reject) => {
+        qrcode.toDataURL(otpauthUrl, (err, imageUrl) => {
+            if (err) {
+                reject('Error generating QR code');
+            } else {
+                resolve(imageUrl);
+            }
+        });
+    });
+};
+
+userSchema.methods.verifyTwoFactor = function(token) {
+    return speakeasy.totp.verify({
+        secret: this.twoFactorSecret,
+        encoding: 'base32',
+        token
+    });
+};
 const User = mongoose.model('User', userSchema);
 module.exports = User;

@@ -154,8 +154,17 @@ const userControllers = {
     // Enable Two-Factor Authentication
     enableTwoFactor: async (req, res, next) => {
         try {
-            // Implement your 2FA logic here (e.g., generate 2FA secret, save to user, etc.)
-            res.json({ message: 'Two-Factor Authentication enabled' });
+            if (!req.isAuthenticated()) {
+                return res.status(401).json({ error: 'You must be logged in to perform this action' });
+            }
+
+            const user = await User.findById(req.user._id);
+            if (!user) {
+                return res.status(404).json({ error: 'User not found' });
+            }
+
+            const qrCodeUrl = await user.enableTwoFactor();
+            res.json({ message: 'Two-Factor Authentication enabled', qrCodeUrl });
         } catch (err) {
             res.status(500).json({ error: err.message });
         }
@@ -163,7 +172,18 @@ const userControllers = {
     // Verify Two-Factor Authentication
     verifyTwoFactor: async (req, res, next) => {
         try {
-            // Implement your 2FA verification logic here
+            const user = await User.findById(req.user._id);
+            if (!user) {
+                return res.status(404).json({ error: 'User not found' });
+            }
+
+            const { token } = req.body;
+            const verified = user.verifyTwoFactor(token);
+
+            if (!verified) {
+                return res.status(400).json({ error: 'Invalid token' });
+            }
+
             res.json({ message: 'Two-Factor Authentication verified' });
         } catch (err) {
             res.status(500).json({ error: err.message });

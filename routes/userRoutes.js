@@ -18,11 +18,11 @@ router.route('/logout')
     .get(userControllers.logout)
 
 router.route('/')
-    .get(isAuthenticated, isAdmin, userControllers.getUsersProfile)
+    .get(isAuthenticated, userControllers.getUsersProfile)
 
 router.route('/:id')
     .get(isAuthenticated, userControllers.getUserProfile )
-    .put(isAuthenticated, isAdmin, userControllers.updateUserAccount)
+    .put(isAuthenticated, userControllers.updateUserAccount)
     .delete(isAuthenticated, userControllers.deleteUserAccount)
 
 

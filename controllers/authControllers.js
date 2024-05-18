@@ -15,7 +15,8 @@ function checkContractorRole(req, res, next) {
 function isAuthenticated(req, res, next) {
     if (!req.isAuthenticated()) {
         req.session.returnTo = req.originalUrl
-        req.flash('error', 'You must be signed in first!')
+        res.status(401).json({ error: 'You must be logged in to access this resource' });
+        //req.flash('error', 'You must be signed in first!')
         return res.redirect('/user/login')
     }
     next()
