@@ -59,10 +59,6 @@ const userSchema = new Schema({
         paymentMethod: String,
         billingInformation: String
     },
-    isAdmin: {
-        type: Boolean,
-        default: false
-    },
     // New fields for authentication and security
     passwordResetToken: String,
     passwordResetExpires: Date,
@@ -85,6 +81,17 @@ const userSchema = new Schema({
     privacySettings: {
         dataSharing: { type: Boolean, default: true },
         profileVisibility: { type: String, enum: ['public', 'private', 'friends'], default: 'public' }
+    },
+    twoFactorEnabled: {
+        type: Boolean,
+        default: false
+    },
+    twoFactorSecret: {
+        type: String
+    },
+    isAdmin: {
+        type: Boolean,
+        default: false
     }
 }, { timestamps: true });
 
