@@ -97,6 +97,12 @@ const userSchema = new Schema({
 
 userSchema.plugin(passportLocalMongoose);
 
+// Create a method to compare the password
+userSchema.methods.isPasswordSame = function(password) {
+    // Use passport-local-mongoose method to compare password
+    return this.authenticate(password);
+}; 
+
 // Instance methods
 userSchema.methods.createPasswordResetToken = function() {
     const resetToken = crypto.randomBytes(32).toString('hex')

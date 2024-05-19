@@ -27,36 +27,23 @@ const userControllers = {
     // Post Login
     loginUser: async (req, res, next) => {
         try {
-            const { username, password } = req.body;
-            const user = await User.findOne({ username });
-
-            // Check if user exists and password is correct
-            if (!user || !(await user.isPasswordSame(password))) {
-                return res.redirect('/user/login')
-            }
-            // If user is admin, log them in directly
-            if (user.isAdmin) {
-                req.login(user, (err) => {
-                    if (err) {
-                        console.log(err)
-                        return next(err);
-                    }
-                    return res.redirect('/')
-                });
-                return;
+            const user = await User.findById(req.user._id);
+            if (user.twoFactorEnabled) {
+                req.session.tmpUser = req.user._id; // Store user ID in session for 2FA verification
+                req.logout(); // Log out the user for now
+                res.json({ message: '2FA required', twoFactorRequired: true });
+            } else {
+                req.flash('success', 'welcome back!');
+                const redirectUrl = req.session.returnTo || '/';
+                delete req.session.returnTo;
+                res.redirect(redirectUrl);
             }
         } catch (err) {
-            console.log(err);
-            res.redirect('/user/login');
+            res.status(500).json({ error: err.message });
         }
     },
     // Logout
     logout: (req, res) => {
-        // Check if the user is authenticated
-        if (!req.isAuthenticated()) {
-            // If user is not logged in, send a response indicating that the user must be logged in
-            return res.status(401).json({ error: 'You must be logged in to perform this action' });
-        }
         req.logout((err) => {
             if (err) {
                 // Handle any errors that occur during the logout process
@@ -102,11 +89,6 @@ const userControllers = {
             if (!deletedUser) {
                 return res.status(404).json({ error: 'User not found' })
             }
-            // Also handle removal of enrolled courses when deleting a user
-            await Course.updateMany(
-                { _id: { $in: deletedUser.enrolledCourses } },
-                { $pull: { students: deletedUser._id } }
-            );
             res.status(200).json(deletedUser)
         } catch (err) {
             res.status(400).json({ error: err.message })
@@ -154,10 +136,6 @@ const userControllers = {
     // Enable Two-Factor Authentication
     enableTwoFactor: async (req, res, next) => {
         try {
-            if (!req.isAuthenticated()) {
-                return res.status(401).json({ error: 'You must be logged in to perform this action' });
-            }
-
             const user = await User.findById(req.user._id);
             if (!user) {
                 return res.status(404).json({ error: 'User not found' });
@@ -172,19 +150,31 @@ const userControllers = {
     // Verify Two-Factor Authentication
     verifyTwoFactor: async (req, res, next) => {
         try {
-            const user = await User.findById(req.user._id);
+            const { token } = req.body;
+            const user = req.session.tmpUser;
+
             if (!user) {
-                return res.status(404).json({ error: 'User not found' });
+                return res.status(400).json({ error: 'Session expired or user not found' });
             }
 
-            const { token } = req.body;
-            const verified = user.verifyTwoFactor(token);
+            const verified = speakeasy.totp.verify({
+                secret: user.twoFactorSecret,
+                encoding: 'base32',
+                token
+            });
 
             if (!verified) {
                 return res.status(400).json({ error: 'Invalid token' });
             }
 
-            res.json({ message: 'Two-Factor Authentication verified' });
+            req.login(user, err => {
+                if (err) return next(err);
+                req.session.tmpUser = null; // Clear the temporary user from the session
+                req.flash('success', 'welcome back!');
+                const redirectUrl = req.session.returnTo || '/';
+                delete req.session.returnTo;
+                res.redirect(redirectUrl);
+            });
         } catch (err) {
             res.status(500).json({ error: err.message });
         }
