@@ -25,22 +25,11 @@ const userControllers = {
         res.send('Login Page')
     },
     // Post Login
-    loginUser: async (req, res, next) => {
-        try {
-            const user = await User.findById(req.user._id);
-            if (user.twoFactorEnabled) {
-                req.session.tmpUser = req.user._id; // Store user ID in session for 2FA verification
-                req.logout(); // Log out the user for now
-                res.json({ message: '2FA required', twoFactorRequired: true });
-            } else {
-                req.flash('success', 'welcome back!');
-                const redirectUrl = req.session.returnTo || '/';
-                delete req.session.returnTo;
-                res.redirect(redirectUrl);
-            }
-        } catch (err) {
-            res.status(500).json({ error: err.message });
-        }
+    loginUser: async (req, res) => {
+        //req.flash('success', 'welcome back!');
+        const redirectUrl = req.session.returnTo || '/';
+        delete req.session.returnTo;
+        res.redirect(redirectUrl);
     },
     // Logout
     logout: (req, res) => {
@@ -65,35 +54,33 @@ const userControllers = {
     getUserProfile: async (req, res) => {
         try {
             const user = await User.findById(req.params.id);
-            res.status(200).json({ user })
-        } catch (err) {
-            res.status(400).json({ err: err.message })
+            if (!user) return res.status(404).send('User not found');
+            res.status(200).send(user);
+        } catch (error) {
+            res.status(400).send(error);
         }
     },
     // Update User Account
     updateUserAccount: async (req, res, next) => {
         try {
-            const updatedUser = await User.findByIdAndUpdate(req.params.id, req.body, { new: true });
-            if (!updatedUser) {
-                return res.status(404).json({ error: 'User not found' })
-            }
-            res.status(200).json(updatedUser)
-        } catch (err) {
-            res.status(400).json({ error: err.message })
+            const user = await User.findByIdAndUpdate(req.params.id, req.body, { new: true, runValidators: true });
+            if (!user) return res.status(404).send('User not found');
+            res.status(200).send(user);
+        } catch (error) {
+            res.status(400).send(error);
         }
     },
     // Delete User Account
     deleteUserAccount: async (req, res, next) => {
         try {
-            const deletedUser = await User.findByIdAndDelete(req.params.id);
-            if (!deletedUser) {
-                return res.status(404).json({ error: 'User not found' })
-            }
-            res.status(200).json(deletedUser)
-        } catch (err) {
-            res.status(400).json({ error: err.message })
+            const user = await User.findByIdAndDelete(req.params.id);
+            if (!user) return res.status(404).send('User not found');
+            res.status(200).send('User deleted');
+        } catch (error) {
+            res.status(400).send(error);
         }
-    },
+    }
+    /*
     // Request Password Reset
     requestPasswordReset: async (req, res, next) => {
         try {
@@ -199,6 +186,7 @@ const userControllers = {
             res.status(500).json({ error: err.message });
         }
     }
+    */
 
 }
 

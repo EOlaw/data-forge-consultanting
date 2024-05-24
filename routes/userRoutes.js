@@ -15,17 +15,17 @@ router.route('/login')
    .post(passport.authenticate('local', { failureFlash: true, failureRedirect: '/user/login' }), userControllers.loginUser)
 
 router.route('/logout')
-    .get(userControllers.logout)
+    .get(isAuthenticated, userControllers.logout)
 
 router.route('/')
-    .get(isAuthenticated, userControllers.getUsersProfile)
+    .get(userControllers.getUsersProfile)
 
 router.route('/:id')
-    .get(isAuthenticated, userControllers.getUserProfile )
-    .put(isAuthenticated, userControllers.updateUserAccount)
-    .delete(isAuthenticated, userControllers.deleteUserAccount)
+    .get(userControllers.getUserProfile )
+    .put(userControllers.updateUserAccount)
+    .delete(userControllers.deleteUserAccount)
 
-
+/*
 // Password Reset
 router.route('/request-rest')
     .post(userControllers.requestPasswordReset)
@@ -42,6 +42,6 @@ router.route('/activate-subscription')
     .post(isAuthenticated, userControllers.activateSubscription)
 router.route('/subscription-status')
     .get(isAuthenticated, userControllers.checkSubscriptionStatus)
-
+*/
 
 module.exports = router;

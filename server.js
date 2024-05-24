@@ -21,6 +21,15 @@ const LocalStrategy = require('passport-local');
 const User = require('./models/userModel')
 
 const userRoutes = require('./routes/userRoutes')
+const consultantProfileRoutes = require('./routes/consultantProfileRoutes');
+const clientRoutes = require('./routes/clientRoutes');
+//const projectRoutes = require('./routes/projectRoutes');
+const consultationRoutes = require('./routes/consultationRoutes');
+//const reviewRoutes = require('./routes/reviewRoutes');
+//const serviceRoutes = require('./routes/serviceRoutes');
+//const invoiceRoutes = require('./routes/invoiceRoutes');
+//const blogRoutes = require('./routes/blogRoutes');
+//const contactInquiryRoutes = require('./routes/contactInquiryRoutes');
 
 
 const dbUrl = process.env.DB_URL
@@ -85,7 +94,17 @@ app.get('/', (req, res) => {
     res.send('Homepage!!!')
 })
 app.use('/user', userRoutes);
+app.use('/consultant-profiles', consultantProfileRoutes);
+app.use('/clients', clientRoutes);
+//app.use('/projects', projectRoutes);
+app.use('/consultation', consultationRoutes);
+//app.use('/reviews', reviewRoutes);
+//app.use('/services', serviceRoutes);
+//app.use('/invoices', invoiceRoutes);
+//app.use('/blogs', blogRoutes);
+//app.use('/contact-inquiries', contactInquiryRoutes);
 
+/*
 // Handle Error Page
 app.all('*', (req, res, next) => {
     next(new ExpressError("Page Not Found", 404 ))
@@ -96,7 +115,7 @@ app.use((err, req, res, next) => {
     if (!err.message) err.message = 'Oh No, Something Went Wrong!'
     res.status(statusCode).render('error', { err })
 })
-
+*/
 
 const port = process.env.PORT || 3000;
 // Start the server

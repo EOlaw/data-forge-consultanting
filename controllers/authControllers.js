@@ -1,5 +1,7 @@
 // Import the necessary modules.
 const User = require('../models/userModel');
+const ConsultantProfile = require('../models/consultantProfileModel')
+const Client = require('../models/clientModel')
 const passport = require('passport');
 /*
 function checkContractorRole(req, res, next) {
@@ -17,7 +19,7 @@ function isAuthenticated(req, res, next) {
         req.session.returnTo = req.originalUrl
         res.status(401).json({ error: 'You must be logged in to access this resource' });
         //req.flash('error', 'You must be signed in first!')
-        return res.redirect('/user/login')
+        return res.redirect('/')
     }
     next()
 }
@@ -45,28 +47,28 @@ function isAdmin(req, res, next) {
     } else {
         // If the user is not authenticated, redirect to the login page
         console.log('User is not authenticated. Redirecting to /user/login');
-        res.redirect('/user/login');
+        res.redirect('/');
     }
 }
 
-// Middleware to check if user is admin or instructor
-function isAuthorizedAsInstructor(req, res, next) {
+// Middleware to check if user is authorized as consultant
+function isAuthorizedAsConsultant(req, res, next) {
     // Check if user is authenticated
     if (req.isAuthenticated()) {
         // Retrieve the user from the database
         User.findById(req.user._id)
             .then((user) => {
-                if (user && (user.isAdmin || user.role === 'instructor')) {
-                    // If the user is admin or instructor, allow access to the route
+                if (user && user.role === 'Consultant') {
+                    // If the user is a consultant, allow access to the route
                     next();
                 } else {
-                    // If the user is neither admin nor instructor, deny access with status 403
-                    console.log('User is not authorized as instructor. Access denied.');
+                    // If the user is not a consultant, deny access with status 403
+                    console.log('User is not authorized as consultant. Access denied.');
                     res.status(403).send('Access denied. You are not allowed to access.');
                 }
             })
             .catch((err) => {
-                console.error('Error while checking authorization as instructor:', err);
+                console.error('Error while checking authorization as consultant:', err);
                 res.status(500).send('Internal Server Error');
             });
     } else {
@@ -76,24 +78,24 @@ function isAuthorizedAsInstructor(req, res, next) {
     }
 }
 
-// Middleware to check if user is admin or instructor
-function isAuthorizedAsStudent(req, res, next) {
+// Middleware to check if user is authorized as client
+function isAuthorizedAsClient(req, res, next) {
     // Check if user is authenticated
     if (req.isAuthenticated()) {
         // Retrieve the user from the database
         User.findById(req.user._id)
             .then((user) => {
-                if (user && (user.isAdmin || user.role === 'student')) {
-                    // If the user is admin or student, allow access to the route
+                if (user && user.role === 'Client') {
+                    // If the user is a client, allow access to the route
                     next();
                 } else {
-                    // If the user is neither admin nor instructor, deny access with status 403
-                    console.log('User is not authorized as student. Access denied.');
+                    // If the user is not a client, deny access with status 403
+                    console.log('User is not authorized as client. Access denied.');
                     res.status(403).send('Access denied. You are not allowed to access.');
                 }
             })
             .catch((err) => {
-                console.error('Error while checking authorization as student:', err);
+                console.error('Error while checking authorization as client:', err);
                 res.status(500).send('Internal Server Error');
             });
     } else {
@@ -103,4 +105,4 @@ function isAuthorizedAsStudent(req, res, next) {
     }
 }
 
-module.exports = { isAuthenticated, isAdmin, isAuthorizedAsInstructor, isAuthorizedAsStudent }
+module.exports = { isAuthenticated, isAdmin, isAuthorizedAsConsultant, isAuthorizedAsClient }
