@@ -1,6 +1,6 @@
 // Import the necessary modules.
 const User = require('../models/userModel');
-const ConsultantProfile = require('../models/consultantProfileModel')
+const ConsultantProfile = require('../models/consultantModel')
 const Client = require('../models/clientModel')
 const passport = require('passport');
 /*

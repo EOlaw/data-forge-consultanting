@@ -1,4 +1,6 @@
 const User = require('../models/userModel')
+const Consultant = require('../models/consultantModel')
+const Client = require('../models/clientModel')
 
 const userControllers = {
     // Register Page

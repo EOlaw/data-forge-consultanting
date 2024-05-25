@@ -9,6 +9,8 @@ const userSchema = new Schema({
     role: { type: String, enum: ['Consultant', 'Client'], required: true },
     contactNumber: { type: String },
     profilePicture: { type: String },
+    //consultantProfile: { type: Schema.Types.ObjectId, ref: 'Consultant' },
+    //clientProfile: { type: Schema.Types.ObjectId, ref: 'Client' },
     lastLogin: { type: Date },
     isAdmin: { type: Boolean, default: false }
 }, { timestamps: true });

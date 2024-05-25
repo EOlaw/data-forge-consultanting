@@ -2,7 +2,7 @@ const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
 const clientSchema = new Schema({
-    userID: { type: Schema.Types.ObjectId, ref: 'User', required: true },
+    userId: { type: Schema.Types.ObjectId, ref: 'User', required: true },
     companyName: { type: String, required: true },
     industry: { type: String },
     contactPerson: { type: String },
