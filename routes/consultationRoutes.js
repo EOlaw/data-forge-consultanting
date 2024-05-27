@@ -15,7 +15,14 @@ router.route('/pending')
 // Approve a consultation request and schedule the session
 router.route('/:id/approve')
     .put(consultationControllers.approveConsultation);
-
+router.route('/:id/cancel')
+    .put(consultationControllers.cancelConsultation);
+router.route('/:id/reschedule')
+    .put(consultationControllers.rescheduleConsultation);
+router.route('/:id/rating')
+    .post(consultationControllers.ratingsConsultation)
+router.route('/:id/updateRatings')
+    .put(consultationControllers.updateRatingsConsultation)
 // Get a consultation by ID
 router.route('/:id')
     .get(consultationControllers.getConsultation)
