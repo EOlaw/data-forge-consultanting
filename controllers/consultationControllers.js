@@ -1,16 +1,23 @@
 const Consultation = require('../models/consultationModel');
 const Client = require('../models/clientModel');
 const Consultant = require('../models/consultantModel');
+const Service = require('../models/serviceModel');
 //const sendEmail = require('../utils/email');
 
 const consultationControllers = {
     // Create a new consultation request (in pending state)
     createConsultation: async (req, res) => {
         try {
-            const { clientId, date, duration, mode, notes, specialization } = req.body;
+            const { clientId, serviceId, date, duration, mode, notes, specialization } = req.body;
 
             if (!specialization || specialization.length === 0) {
                 return res.status(400).json({ error: 'Specializations must be provided' });
+            }
+
+            // Check if the service exists
+            const service = await Service.findById(serviceId);
+            if (!service) {
+                return res.status(404).json({ error: 'Service not found' });
             }
 
             // Find an available consultant with the required specializations
@@ -27,6 +34,7 @@ const consultationControllers = {
             const consultation = new Consultation({
                 clientId,
                 consultantId: consultant._id,
+                serviceId, // Include serviceId
                 date,
                 duration,
                 mode,
@@ -216,7 +224,7 @@ const consultationControllers = {
     // Get all canceled consultations (for consultants to review)
     getCanceledConsultations: async (req, res) => {
         try {
-            const consultation = await Consultation.find({ status: 'canceled' });
+            const consultation = await Consultation.find({ status: 'canceled' }).populate('serviceId');
             res.status(200).json(consultation);
         } catch (err) {
             res.status(400).json({ error: err.message });

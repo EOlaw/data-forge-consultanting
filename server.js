@@ -20,14 +20,12 @@ const LocalStrategy = require('passport-local');
 
 const User = require('./models/userModel')
 
-const userRoutes = require('./routes/userRoutes')
-const consultantRoutes = require('./routes/consultantRoutes');
+const userRoutes = require('./routes/userRoutes');
 const clientRoutes = require('./routes/clientRoutes');
-//const projectRoutes = require('./routes/projectRoutes');
+const consultantRoutes = require('./routes/consultantRoutes');
 const consultationRoutes = require('./routes/consultationRoutes');
-//const reviewRoutes = require('./routes/reviewRoutes');
-//const serviceRoutes = require('./routes/serviceRoutes');
-//const invoiceRoutes = require('./routes/invoiceRoutes');
+const serviceRoutes = require('./routes/serviceRoutes');
+const invoiceRoutes = require('./routes/invoiceRoutes');
 //const blogRoutes = require('./routes/blogRoutes');
 //const contactInquiryRoutes = require('./routes/contactInquiryRoutes');
 
@@ -94,13 +92,11 @@ app.get('/', (req, res) => {
     res.send('Homepage!!!')
 })
 app.use('/user', userRoutes);
-app.use('/consultant', consultantRoutes);
 app.use('/clients', clientRoutes);
-//app.use('/projects', projectRoutes);
+app.use('/consultant', consultantRoutes);
 app.use('/consultation', consultationRoutes);
-//app.use('/reviews', reviewRoutes);
-//app.use('/services', serviceRoutes);
-//app.use('/invoices', invoiceRoutes);
+app.use('/services', serviceRoutes);
+app.use('/invoices', invoiceRoutes);
 //app.use('/blogs', blogRoutes);
 //app.use('/contact-inquiries', contactInquiryRoutes);
 

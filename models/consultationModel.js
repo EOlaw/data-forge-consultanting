@@ -4,6 +4,7 @@ const Schema = mongoose.Schema;
 const consultationSchema = new Schema({
     clientId: { type: Schema.Types.ObjectId, ref: 'Client', required: true },
     consultantId: { type: Schema.Types.ObjectId, ref: 'ConsultantProfile', required: true },
+    serviceId: { type: Schema.Types.ObjectId, ref: 'Service', required: true },
     date: { type: Date, required: true },
     duration: { type: Number, required: true },
     mode: { type: String, enum: ['In-person', 'Online'], required: true },
@@ -15,7 +16,7 @@ const consultationSchema = new Schema({
         rating: { type: Number, min: 1, max: 5, required: true },
         comments: { type: String }
     }]
-});
+}, { timestamps: true });
 
 
 const Consultation = mongoose.model('Consultation', consultationSchema);

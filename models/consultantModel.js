@@ -10,7 +10,7 @@ const consultantSchema = new Schema({
     linkedInProfile: { type: String },
     availability: { type: Boolean, default: true },
     rating: { type: Number, min: 0, max: 5 }
-});
+}, { timestamps: true });
 
 
 const Consultant = mongoose.model('Consultant', consultantSchema);
