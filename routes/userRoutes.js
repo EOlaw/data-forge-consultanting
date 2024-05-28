@@ -3,7 +3,7 @@ const router = express.Router();
 const passport = require('passport');
 const User = require('../models/userModel');
 const userControllers = require('../controllers/userControllers');
-const { isAuthenticated, isAdmin } = require('../controllers/authControllers');
+const { isAuthenticated, isAdmin, isAuthorizedAsConsultant, isAuthorizedAsClient } = require('../controllers/authControllers');
 
 // User Profile
 router.route('/register')
@@ -18,12 +18,12 @@ router.route('/logout')
     .get(isAuthenticated, userControllers.logout)
 
 router.route('/')
-    .get(userControllers.getUsersProfile)
+    .get( userControllers.getUsers)
 
 router.route('/:id')
-    .get(userControllers.getUserProfile )
-    .put(userControllers.updateUserAccount)
-    .delete(userControllers.deleteUserAccount)
+    .get(isAuthenticated, userControllers.getUser)
+    .put(isAuthenticated, userControllers.updateUserAccount)
+    .delete(isAuthenticated, userControllers.deleteUserAccount)
 
 /*
 // Password Reset

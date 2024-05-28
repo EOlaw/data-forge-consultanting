@@ -3,7 +3,7 @@ const User = require('../models/userModel');
 
 const consultantControllers = {
     // Create a new consultant profile
-    createConsultantProfile: async (req, res) => {
+    createConsultant: async (req, res) => {
         try {
             const user = await User.findById(req.body.userId);
             if (!user) return res.status(404).json({ error: 'User not found' });
@@ -16,7 +16,7 @@ const consultantControllers = {
         }
     },
     // Get all consultant profiles
-    getConsultantsProfile: async (req, res) => {
+    getConsultants: async (req, res) => {
         try {
             const consultants = await Consultant.find().populate('userId');
             res.status(200).json(consultants);
@@ -25,7 +25,7 @@ const consultantControllers = {
         }
     },
     // Get a consultant profile by ID
-    getConsultantProfile: async (req, res) => {
+    getConsultant: async (req, res) => {
         try {
             const consultant = await Consultant.findById(req.params.id).populate('userId');
             if (!consultant) return res.status(404).json({ error: 'Consultant profile not found' });
@@ -35,7 +35,7 @@ const consultantControllers = {
         }
     },
     // Update a consultant profile by ID
-    updateConsultantProfile: async (req, res) => {
+    updateConsultant: async (req, res) => {
         try {
             const consultant = await Consultant.findByIdAndUpdate(req.params.id, req.body, { new: true, runValidators: true });
             if (!consultant) return res.status(404).json({ error: 'Consultant profile not found' });
@@ -45,7 +45,7 @@ const consultantControllers = {
         }
     },
     // Delete a consultant profile by ID
-    deleteConsultantProfile: async (req, res) => {
+    deleteConsultant: async (req, res) => {
         try {
             const consultant = await Consultant.findByIdAndDelete(req.params.id);
             if (!consultant) return res.status(404).json({ error: 'Consultant profile not found' });

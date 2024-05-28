@@ -1,14 +1,14 @@
 const express = require('express');
 const router = express.Router();
 const consultantControllers = require('../controllers/consultantControllers')
-const { isAuthenticated, isAdmin } = require('../controllers/authControllers');
+const { isAuthenticated, isAdmin, isAuthorizedAsConsultant, isAuthorizedAsClient } = require('../controllers/authControllers');
 
 router.route('/')
-    .post(consultantControllers.createConsultantProfile)
-    .get(consultantControllers.getConsultantsProfile)
+    .post(consultantControllers.createConsultant)
+    .get(consultantControllers.getConsultants)
 router.route('/:id')
-    .get(consultantControllers.getConsultantProfile)
-    .put(consultantControllers.updateConsultantProfile)
-    .delete(consultantControllers.deleteConsultantProfile)
+    .get(isAuthenticated, isAuthorizedAsConsultant, consultantControllers.getConsultant)
+    .put(isAuthenticated, isAuthorizedAsConsultant,consultantControllers.updateConsultant)
+    .delete(isAuthenticated, isAuthorizedAsConsultant,consultantControllers.deleteConsultant)
 
 module.exports = router;

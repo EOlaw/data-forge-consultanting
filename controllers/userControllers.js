@@ -44,7 +44,7 @@ const userControllers = {
         })
     },
     // Get Users Profile
-    getUsersProfile: async (req, res) => {
+    getUsers: async (req, res) => {
         try {
             const users = await User.find();
             res.status(200).json({ users: users })
@@ -53,7 +53,7 @@ const userControllers = {
         }
     },
     // Get User Profile
-    getUserProfile: async (req, res) => {
+    getUser: async (req, res) => {
         try {
             const user = await User.findById(req.params.id);
             if (!user) return res.status(404).send('User not found');

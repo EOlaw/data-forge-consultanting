@@ -37,17 +37,18 @@ function isAdmin(req, res, next) {
                 } else {
                     // If the user is not admin, deny access with status 403
                     console.log('User is not admin. Access denied.');
-                    res.status(403).send('Access denied. You are not allowed to access.');
+                    return res.status(403).send('Access denied. You are not allowed to access.');
                 }
             })
             .catch((err) => {
                 console.error('Error while checking admin status:', err);
-                res.status(500).send('Internal Server Error');
+                return res.status(500).send('Internal Server Error');
             });
     } else {
         // If the user is not authenticated, redirect to the login page
         console.log('User is not authenticated. Redirecting to /user/login');
-        res.redirect('/');
+        return res.status(401).json({ error: 'You must be logged in to access this resource'})
+        //res.redirect('/');
     }
 }
 
@@ -64,17 +65,18 @@ function isAuthorizedAsConsultant(req, res, next) {
                 } else {
                     // If the user is not a consultant, deny access with status 403
                     console.log('User is not authorized as consultant. Access denied.');
-                    res.status(403).send('Access denied. You are not allowed to access.');
+                    return res.status(403).send('Access denied. You are not allowed to access.');
                 }
             })
             .catch((err) => {
                 console.error('Error while checking authorization as consultant:', err);
-                res.status(500).send('Internal Server Error');
+                return res.status(500).send('Internal Server Error');
             });
     } else {
         // If the user is not authenticated, redirect to the login page
         console.log('User is not authenticated. Redirecting to /user/login');
-        res.redirect('/user/login');
+        return res.status(401).json({ error: 'You must be logged in to access this resource' })
+        //res.redirect('/user/login');
     }
 }
 
