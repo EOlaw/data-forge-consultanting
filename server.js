@@ -20,6 +20,7 @@ const LocalStrategy = require('passport-local');
 
 const User = require('./models/userModel')
 
+const homeRoutes = require('./routes/homeRoutes')
 const userRoutes = require('./routes/userRoutes');
 const clientRoutes = require('./routes/clientRoutes');
 const consultantRoutes = require('./routes/consultantRoutes');
@@ -88,9 +89,7 @@ app.use((req, res, next) => {
 })
 
 // Handle Routes
-app.get('/', (req, res) => {
-    res.send('Homepage!!!')
-})
+app.use('/', homeRoutes)
 app.use('/user', userRoutes);
 app.use('/clients', clientRoutes);
 app.use('/consultant', consultantRoutes);

@@ -2,6 +2,7 @@
 const express = require('express');
 const router = express.Router();
 const clientControllers = require('../controllers/clientControllers');
+const { isAuthenticated, isAdmin, isAuthorizedAsConsultant, isAuthorizedAsClient } = require('../controllers/authControllers');
 
 // Route to create a client
 router.route('/')

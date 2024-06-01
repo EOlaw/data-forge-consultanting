@@ -1,6 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const serviceControllers = require('../controllers/serviceControllers');
+const { isAuthenticated, isAdmin, isAuthorizedAsConsultant, isAuthorizedAsClient } = require('../controllers/authControllers');
 
 // Create a new service
 router.route('/')

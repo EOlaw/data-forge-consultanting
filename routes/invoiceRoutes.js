@@ -1,6 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const invoiceControllers = require('../controllers/invoiceControllers');
+const { isAuthenticated, isAdmin, isAuthorizedAsConsultant, isAuthorizedAsClient } = require('../controllers/authControllers');
 
 router.route('/invoices')
     .post(invoiceControllers.createInvoice)
