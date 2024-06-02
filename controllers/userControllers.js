@@ -5,7 +5,7 @@ const Client = require('../models/clientModel')
 const userControllers = {
     // Register Page
     renderRegister: (req, res) => {
-        res.send('Register Page')
+        res.render('user/register')
     },
     // Post Register
     registerUser: async (req, res, next) => {
@@ -24,7 +24,7 @@ const userControllers = {
     },
     // Login Page
     renderLogin: (req, res) => {
-        res.send('Login Page')
+        res.render('user/login')
     },
     // Post Login
     loginUser: async (req, res) => {
