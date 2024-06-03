@@ -40,7 +40,7 @@ const userControllers = {
                 // Handle any errors that occur during the logout process
                 console.log(err);
             }
-            res.json('User logged out successfully');
+            res.redirect('/')
         })
     },
     // Get Users Profile

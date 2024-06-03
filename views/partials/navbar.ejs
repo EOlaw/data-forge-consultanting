@@ -1,40 +1,47 @@
-<!-- ======= Header ======= -->
-<header id="header" class="fixed-top">
-  <div class="container d-flex align-items-center justify-content-lg-between">
-
-    <h1 class="logo me-auto me-lg-0"><a href="index.html">Gp<span>.</span></a></h1>
-    <!-- Uncomment below if you prefer to use an image logo -->
-    <a href="index.html" class="logo me-auto me-lg-0"><img src="lib/img/logo.png" alt="" class="img-fluid"></a>
-
-    <nav id="navbar" class="navbar order-last order-lg-0">
-      <ul>
-        <li><a class="nav-link scrollto active" href="/">Home</a></li>
-        <li><a class="nav-link scrollto" href="/about">About</a></li>
-        <li><a class="nav-link scrollto" href="/services">Services</a></li>
-        <li><a class="nav-link scrollto " href="/portfolio">Portfolio</a></li>
-        <li><a class="nav-link scrollto" href="/teams">Team</a></li>
-        <li class="dropdown"><a href="#"><span>Drop Down</span> <i class="bi bi-chevron-down"></i></a>
-          <ul>
-            <li><a href="/user/login">Login</a></li>
-            <li><a href="/user/register">Register</a></li>
-            <li class="dropdown"><a href="#"><span>Account Settings</span> <i class="bi bi-chevron-right"></i></a>
-              <ul>
-                <li><a href="#">Deep Drop Down 3</a></li>
-                <li><a href="#">Deep Drop Down 4</a></li>
-                <li><a href="#">Deep Drop Down 5</a></li>
-              </ul>
-            </li>
-            <li><a href="#">Drop Down 2</a></li>
-            <li><a href="#">Drop Down 3</a></li>
-            <li><a href="#">Drop Down 4</a></li>
-          </ul>
-        </li>
-        <li><a class="nav-link scrollto" href="#contact">Contact</a></li>
-      </ul>
-      <i class="bi bi-list mobile-nav-toggle"></i>
-    </nav><!-- .navbar -->
-
-    <a href="#about" class="get-started-btn scrollto">Get Started</a>
-
+<!-- Navbar Start -->
+<nav class="navbar navbar-expand-lg bg-white navbar-light shadow sticky-top p-0">
+  <a href="/" class="navbar-brand d-flex align-items-center px-4 px-lg-5">
+      <h2 class="m-0 text-primary"><i class="fa fa-book me-3"></i>Wato</h2>
+  </a>
+  <button type="button" class="navbar-toggler me-4" data-bs-toggle="collapse" data-bs-target="#navbarCollapse">
+      <span class="navbar-toggler-icon"></span>
+  </button>
+  <div class="collapse navbar-collapse" id="navbarCollapse">
+      <div class="navbar-nav ms-auto p-4 p-lg-0">
+          <a href="/admin/courses" class="nav-item nav-link active">Courses</a>
+          <a href="/about" class="nav-item nav-link">About</a>
+          <a href="/contact" class="nav-item nav-link">Contact</a>
+          <a href="/resources" class="nav-item nav-link">Resources</a>
+          <a href="/faqs" class="nav-item nav-link">FAQs</a>
+      </div>
+      <% if(!currentUser) {%>
+          <a class="nav-item nav-link active" href="/user/login">Login</a>
+        <a href="/user/register" class="btn btn-primary py-4 px-lg-5 d-none d-lg-block">Join Now<i class="fa fa-arrow-right ms-3"></i></a>
+        <% } else if (currentUser.role === 'Consultant') { %>
+          <a href="/user/<%= currentUser._id %>/instructor-dashboard" class="nav-item nav-link">Consultant Portal</a>
+          <div class="nav-item dropdown">
+            <button type="button" class="btn btn-info">Welcome to Wato, <%= currentUser.name %></button>
+            <div class="dropdown-menu fade-down m-0">
+                <a href="/profile" class="dropdown-item">Profile</a>
+                <a href="/account-setting" class="dropdown-item">Setting</a>
+                <a href="/purchase" class="dropdown-item">Purchase</a>
+                <a href="/user/logout" class="dropdown-item text-danger">Logout</a>
+            </div>
+          </div>
+          <!-- Rest of the dropdown menu remains the same -->
+      <% } else { %>
+          <a href="/user/<%= currentUser._id %>/student-dashboard" class="nav-item nav-link">Client Portal</a>
+          <div class="nav-item dropdown">
+            <button type="button" class="btn btn-info">Welcome to Wato, <%= currentUser.name %></button>
+            <div class="dropdown-menu fade-down m-0">
+                <a href="/profile" class="dropdown-item">Profile</a>
+                <a href="/account-setting" class="dropdown-item">Setting</a>
+                <a href="/purchase" class="dropdown-item">Purchase</a>
+                <a href="/user/logout" class="dropdown-item text-danger">Logout</a>
+            </div>
+          </div>
+          <!-- Rest of the dropdown menu remains the same -->
+      <% } %>
   </div>
-</header><!-- End Header -->
+</nav>
+<!-- Navbar End -->
