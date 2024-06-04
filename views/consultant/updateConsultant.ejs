@@ -1,0 +1,46 @@
+<% layout('layouts/boilerplate') %>
+<!-- Update Consultant Section Start -->
+<section id="update-consultant" class="update-consultant">
+    <div class="container" data-aos="fade-up">
+        <div class="row">
+            <div class="col-lg-8 offset-lg-2" data-aos="fade-right" data-aos-delay="100">
+                <h3>Update Consultant Profile</h3>
+                <form action="/consultants/<%= consultant._id %>" method="POST">
+                    <div class="mb-3">
+                        <label for="userId" class="form-label">User ID</label>
+                        <input type="text" class="form-control" id="userId" name="userId" value="<%= consultant.userId %>" readonly>
+                    </div>
+                    <div class="mb-3">
+                        <label for="specialization" class="form-label">Specialization</label>
+                        <input type="text" class="form-control" id="specialization" name="specialization" value="<%= consultant.specialization %>" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="experienceYears" class="form-label">Years of Experience</label>
+                        <input type="number" class="form-control" id="experienceYears" name="experienceYears" value="<%= consultant.experienceYears %>" min="0">
+                    </div>
+                    <div class="mb-3">
+                        <label for="bio" class="form-label">Bio</label>
+                        <textarea class="form-control" id="bio" name="bio"><%= consultant.bio %></textarea>
+                    </div>
+                    <div class="mb-3">
+                        <label for="certifications" class="form-label">Certifications</label>
+                        <input type="text" class="form-control" id="certifications" name="certifications" value="<%= consultant.certifications %>">
+                    </div>
+                    <div class="mb-3">
+                        <label for="linkedInProfile" class="form-label">LinkedIn Profile</label>
+                        <input type="text" class="form-control" id="linkedInProfile" name="linkedInProfile" value="<%= consultant.linkedInProfile %>">
+                    </div>
+                    <div class="mb-3">
+                        <label for="availability" class="form-label">Availability</label>
+                        <select class="form-control" id="availability" name="availability">
+                            <option value="true" <%= consultant.availability ? 'selected' : '' %>>Available</option>
+                            <option value="false" <%= !consultant.availability ? 'selected' : '' %>>Not Available</option>
+                        </select>
+                    </div>
+                    <button type="submit" class="btn btn-primary">Update Consultant</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</section>
+<!-- Update Consultant Section End -->
