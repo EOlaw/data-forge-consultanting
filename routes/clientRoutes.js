@@ -5,13 +5,19 @@ const clientControllers = require('../controllers/clientControllers');
 const { isAuthenticated, isAdmin, isAuthorizedAsConsultant, isAuthorizedAsClient } = require('../controllers/authControllers');
 
 // Route to create a client
+router.route('/new')
+    .get(isAuthenticated, isAuthorizedAsClient, clientControllers.renderCreateForm)
 router.route('/')
-    .post(clientControllers.createClient)
-    .get(clientControllers.getClients)
+    .post(isAuthenticated, isAuthorizedAsClient, clientControllers.createClient)
+    .get(isAuthenticated, isAuthorizedAsClient, clientControllers.getClients)
     
+// Render form to update a consultant profile by ID
+router.route('/:id/edit')
+    .get(isAuthenticated, isAuthorizedAsClient, clientControllers.renderUpdateForm);
+
 router.route('/:id')
-    .get(clientControllers.getClient)
-    .put(clientControllers.updateClient)
-    .delete(clientControllers.deleteClient)
+    .get(isAuthenticated, clientControllers.getClient)
+    .put(isAuthenticated, isAuthorizedAsClient, clientControllers.updateClient)
+    .delete(isAuthenticated, isAuthorizedAsClient, clientControllers.deleteClient)
 
 module.exports = router;

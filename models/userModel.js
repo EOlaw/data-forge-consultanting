@@ -4,10 +4,11 @@ const crypto = require('crypto');
 const Schema = mongoose.Schema;
 
 const userSchema = new Schema({
-    name: { type: String, required: true },
+    firstname: { type: String, required: true },
+    lastname: { type: String, required: true },
     email: { type: String, required: true, unique: true },
     role: { type: String, enum: ['Consultant', 'Client'], required: true },
-    contactNumber: { type: String },
+    contactNumber: { type: Number },
     profilePicture: { type: String },
     //consultantProfile: { type: Schema.Types.ObjectId, ref: 'Consultant' },
     //clientProfile: { type: Schema.Types.ObjectId, ref: 'Client' },

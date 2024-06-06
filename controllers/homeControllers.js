@@ -14,12 +14,16 @@ const homeController = {
     portfolio: (req, res) => {
         res.render('home/portfolio')
     },
+    portfolioDetails: (req, res) => {
+        res.render('home/portfolioDetails')
+    },
     team: (req, res) => {
         res.render('home/team')
     },
     contact: (req, res) => {
         res.render('home/contact')
     }
+
 }
 
 module.exports = homeController

@@ -15,7 +15,7 @@ const consultantControllers = {
             if (user.role !== 'Consultant') return res.status(403).render('error', { message: 'Only users with the role of "Consultant" can create consultant profiles' });
             const consultant = new Consultant(req.body);
             await consultant.save();
-            res.redirect(`/consultants/${consultant._id}`);
+            res.redirect(`/consultant/${consultant._id}`);
         } catch (err) {
             res.status(400).render('error', { message: err.message });
         }
@@ -25,6 +25,7 @@ const consultantControllers = {
     getConsultants: async (req, res) => {
         try {
             const consultants = await Consultant.find().populate('userId');
+            //res.json({ message: 'Consultant', consultants })
             res.render('consultant/listConsultants', { consultants });
         } catch (err) {
             res.status(400).render('error', { message: err.message });
@@ -35,8 +36,11 @@ const consultantControllers = {
     getConsultant: async (req, res) => {
         try {
             const consultant = await Consultant.findById(req.params.id).populate('userId');
-            if (!consultant) return res.status(404).render('error', { message: 'Consultant profile not found' });
-            res.render('consultant/viewConsultant', { consultant });
+            if (!consultant) return res.status(404).json('error', { message: 'Consultant profile not found' });
+            const user = await User.findById(consultant.userId);
+            res.render('consultant/consultantProfile', { consultant: { ...consultant._doc, user } });
+            //res.json({ message: 'Consultant', consultant })
+            //res.render('consultant/viewConsultant', { consultant });
         } catch (err) {
             res.status(400).render('error', { message: err.message });
         }
@@ -45,7 +49,7 @@ const consultantControllers = {
     // Render form to update a consultant profile by ID
     renderUpdateForm: async (req, res) => {
         try {
-            const consultant = await Consultant.findById(req.params.id);
+            const consultant = await Consultant.findById(req.params.id).populate('userId');
             if (!consultant) return res.status(404).render('error', { message: 'Consultant profile not found' });
             res.render('consultant/updateConsultant', { consultant });
         } catch (err) {
@@ -56,9 +60,9 @@ const consultantControllers = {
     // Update a consultant profile by ID
     updateConsultant: async (req, res) => {
         try {
-            const consultant = await Consultant.findByIdAndUpdate(req.params.id, req.body, { new: true, runValidators: true });
+            const consultant = await Consultant.findByIdAndUpdate(req.params.id, req.body, { new: true, runValidators: true }).populate('userId');
             if (!consultant) return res.status(404).render('error', { message: 'Consultant profile not found' });
-            res.redirect(`/consultants/${consultant._id}`);
+            res.redirect(`/consultant/${consultant._id}`);
         } catch (err) {
             res.status(400).render('error', { message: err.message });
         }

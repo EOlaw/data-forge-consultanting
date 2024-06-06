@@ -7,12 +7,12 @@ const { isAuthenticated, isAdmin, isAuthorizedAsConsultant, isAuthorizedAsClient
 
 // User Profile
 router.route('/register')
+    .post(userControllers.registerUser)
     .get(userControllers.renderRegister)
-    .post(userControllers.registerUser);
 
 router.route('/login')
-   .get(userControllers.renderLogin)
    .post(passport.authenticate('local', { failureFlash: true, failureRedirect: '/user/login' }), userControllers.loginUser)
+   .get(userControllers.renderLogin);
 
 router.route('/logout')
     .get(isAuthenticated, userControllers.logout)

@@ -1,6 +1,6 @@
 // Import the necessary modules.
 const User = require('../models/userModel');
-const ConsultantProfile = require('../models/consultantModel')
+const Consultant = require('../models/consultantModel')
 const Client = require('../models/clientModel')
 const passport = require('passport');
 /*
@@ -92,7 +92,6 @@ function isAuthorizedAsClient(req, res, next) {
                     next();
                 } else {
                     // If the user is not a client, deny access with status 403
-                    console.log('User is not authorized as client. Access denied.');
                     res.status(403).send('Access denied. You are not allowed to access.');
                 }
             })
@@ -103,7 +102,7 @@ function isAuthorizedAsClient(req, res, next) {
     } else {
         // If the user is not authenticated, redirect to the login page
         console.log('User is not authenticated. Redirecting to /user/login');
-        res.redirect('/user/login');
+        res.status(401).redirect('/user/login');
     }
 }
 

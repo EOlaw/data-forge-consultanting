@@ -1,48 +1,61 @@
-<!-- Navbar Start -->
-<nav class="navbar navbar-expand-lg bg-white navbar-light shadow sticky-top p-0">
-  <a href="/" class="navbar-brand d-flex align-items-center px-4 px-lg-5">
-      <h2 class="m-0 text-primary"><i class="fa fa-book me-3"></i>Data-Forge Inc.</h2>
-  </a>
-  <button type="button" class="navbar-toggler me-4" data-bs-toggle="collapse" data-bs-target="#navbarCollapse">
-      <span class="navbar-toggler-icon"></span>
-  </button>
-  <div class="collapse navbar-collapse" id="navbarCollapse">
-      <div class="navbar-nav ms-auto p-4 p-lg-0">
-          <a href="/cofounder" class="nav-item nav-link active">CO-Founder</a>
-          <a href="/about" class="nav-item nav-link">About</a>
-          <a href="/contact" class="nav-item nav-link">Team</a>
-          <a href="/services" class="nav-item nav-link">Services</a>
-          <a href="/portfolio" class="nav-item nav-link">Portfolio</a>
-          <a href="/contact" class="nav-item nav-link">Contact</a>
-      </div>
-      <% if(!currentUser) {%>
-          <a class="nav-item nav-link active" href="/user/login">Login</a>
-        <a href="/user/register" class="btn btn-primary py-4 px-lg-5 d-none d-lg-block">Join Now<i class="fa fa-arrow-right ms-3"></i></a>
-        <% } else if (currentUser.role === 'Consultant') { %>
-          <a href="/consultant/" class="nav-item nav-link">Consultant Portal</a>
-          <div class="nav-item dropdown">
-            <button type="button" class="btn btn-info">Welcome to Wato, <%= currentUser.name %></button>
-            <div class="dropdown-menu fade-down m-0">
-                <a href="/profile" class="dropdown-item">Profile</a>
-                <a href="/account-setting" class="dropdown-item">Setting</a>
-                <a href="/purchase" class="dropdown-item">Purchase</a>
-                <a href="/user/logout" class="dropdown-item text-danger">Logout</a>
-            </div>
-          </div>
-          <!-- Rest of the dropdown menu remains the same -->
-      <% } else { %>
-          <a href="/client/" class="nav-item nav-link">Client Portal</a>
-          <div class="nav-item dropdown">
-            <button type="button" class="btn btn-info">Welcome to Wato, <%= currentUser.name %></button>
-            <div class="dropdown-menu fade-down m-0">
-                <a href="/profile" class="dropdown-item">Profile</a>
-                <a href="/account-setting" class="dropdown-item">Setting</a>
-                <a href="/purchase" class="dropdown-item">Purchase</a>
-                <a href="/user/logout" class="dropdown-item text-danger">Logout</a>
-            </div>
-          </div>
-          <!-- Rest of the dropdown menu remains the same -->
-      <% } %>
+<header id="header" class="fixed-top ">
+  <div class="container d-flex align-items-center justify-content-lg-between">
+
+    <h1 class="logo me-auto me-lg-0"><a href="/">DF<span>.</span></a></h1>
+
+    <nav id="navbar" class="navbar order-last order-lg-0">
+      <ul>
+        <li><a class="nav-link scrollto active" href="/">Home</a></li>
+        <li><a class="nav-link scrollto" href="/about">About</a></li>
+        <li><a class="nav-link scrollto" href="/services">Services</a></li>
+        <li><a class="nav-link scrollto " href="/portfolio">Portfolio</a></li>
+        <li><a class="nav-link scrollto" href="/team">Team</a></li>
+        <li><a class="nav-link scrollto" href="/contact">Contact</a></li>
+        
+        <% if (currentUser.role === 'Consultant') { %>
+          <li><a href="/consultant/<%= consultant._id %>" class="nav-link scrollto">Consultant Portal</a></li>
+          <li class="dropdown"><a href="#"><span>Welcome to DF, <%= currentUser.firstname %></span> <i class="bi bi-chevron-down"></i></a>
+            <ul>
+              <li><a href="#">Profile</a></li>
+              <li class="dropdown"><a href="#"><span>Help & Support</span> <i class="bi bi-chevron-right"></i></a>
+                <ul>
+                  <li><a href="#">Help Center</a></li>
+                  <li><a href="#">Support Inbox</a></li>
+                  <li><a href="#">Report a problem</a></li>
+                  <li><a href="#">Terms & Policies</a></li>
+                </ul>
+              </li>
+              <li><a href="#">Settings & Privacy</a></li>
+              <li><a href="/user/logout" class="text-danger">Logout</a></li>
+            </ul>
+          </li>
+        <% } %>
+        <% if (currentUser.role === 'Client') { %>
+          <li><a href="/client/<%= client._id %>" class="nav-link scrollto">Client Portal</a></li>
+          <li class="dropdown"><a href="#"><span>Welcome to DF, <%= currentUser.firstname %></span> <i class="bi bi-chevron-down"></i></a>
+            <ul>
+              <li><a href="#">Profile</a></li>
+              <li class="dropdown"><a href="#"><span>Help & Support</span> <i class="bi bi-chevron-right"></i></a>
+                <ul>
+                  <li><a href="#">Help Center</a></li>
+                  <li><a href="#">Support Inbox</a></li>
+                  <li><a href="#">Report a problem</a></li>
+                  <li><a href="#">Terms & Policies</a></li>
+                </ul>
+              </li>
+              <li><a href="#">Settings & Privacy</a></li>
+              <li><a href="/user/logout" class="text-danger">Logout</a></li>
+            </ul>
+          </li>
+        <% } %>
+      </ul>
+      <i class="bi bi-list mobile-nav-toggle"></i>
+    </nav><!-- .navbar -->
+    <% if (!currentUser) { %>
+      <a href="/user/login" class="get-started-btn scrollto">Login</a>
+      <a href="/user/register" class="get-started-btn scrollto">Get Started</a>
+    <% } %>
+
   </div>
-</nav>
-<!-- Navbar End -->
+</header>
+

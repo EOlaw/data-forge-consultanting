@@ -1,4 +1,22 @@
 <% layout('layouts/boilerplate') %>
+
+<!-- Header Start -->
+<div class="container-fluid bg-black py-5 mb-5 page-header">
+    <div class="container py-5">
+        <div class="row justify-content-center">
+            <div class="col-lg-10 text-center">
+                <h1 class="display-3 text-white animated slideInDown">Consultants List</h1>
+                <nav aria-label="breadcrumb">
+                    <ol class="breadcrumb justify-content-center">
+                        <li class="breadcrumb-item"><a class="text-white" href="/">Home</a></li>
+                        <li class="breadcrumb-item text-white active" aria-current="page">Consultants List</li>
+                    </ol>
+                </nav>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Header End -->
 <!-- List Consultants Section Start -->
 <section id="list-consultants" class="list-consultants">
     <div class="container" data-aos="fade-up">
@@ -18,7 +36,7 @@
                     <tbody>
                         <% consultants.forEach(consultant => { %>
                         <tr>
-                            <td><%= consultant.userId.name %></td>
+                            <td><a href="/consultant/<%= consultant._id %>"><%= consultant.userId.firstname %> <%= consultant.userId.lastname %></a></td>
                             <td><%= consultant.specialization.join(', ') %></td>
                             <td><%= consultant.experienceYears %></td>
                             <td><%= consultant.availability ? 'Available' : 'Not Available' %></td>

@@ -1,0 +1,38 @@
+<% layout('layouts/boilerplate') %>
+
+<!-- Header Start -->
+<div class="container-fluid bg-black py-5 mb-5 page-header">
+    <div class="container py-5">
+        <div class="row justify-content-center">
+            <div class="col-lg-10 text-center">
+                <h1 class="display-3 text-white animated slideInDown">Clien</h1>
+                <nav aria-label="breadcrumb">
+                    <ol class="breadcrumb justify-content-center">
+                        <li class="breadcrumb-item"><a class="text-white" href="/">Home</a></li>
+                        <li class="breadcrumb-item text-white active" aria-current="page">Client</li>
+                    </ol>
+                </nav>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Header End -->
+
+<div class="container mt-4">
+    <h1>Client Profile</h1>
+    <div class="row">
+        <div class="col-md-4">
+            <img src="<%= client.userId.profilePicture %>" alt="Profile Picture" class="img-fluid rounded">
+        </div>
+        <div class="col-md-8">
+            <h2><%= client.userId.firstname %> <%= client.userId.lastname %></h2>
+            <p>Email: <%= client.userId.email %></p>
+            <p>Phone: <%= client.userId.phone %></p>
+            <p>Address: <%= client.userId.address %></p>
+            <a href="/clients/<%= client._id %>/edit" class="btn btn-warning">Edit</a>
+            <form action="/clients/<%= client._id %>?_method=DELETE" method="POST" class="d-inline">
+                <button type="submit" class="btn btn-danger">Delete</button>
+            </form>
+        </div>
+    </div>
+</div>

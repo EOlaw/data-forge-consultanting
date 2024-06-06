@@ -14,6 +14,8 @@ router.route('/services')
     .get(homeControllers.services)
 router.route('/portfolio')
     .get(homeControllers.portfolio)
+router.route('/portfolio-details')
+    .get(homeControllers.portfolioDetails)
 router.route('/contact')
     .get(homeControllers.contact)
 

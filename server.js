@@ -19,6 +19,8 @@ const LocalStrategy = require('passport-local');
 
 
 const User = require('./models/userModel')
+const Consultant = require('./models/consultantModel')
+const Client = require('./models/clientModel')
 
 const homeRoutes = require('./routes/homeRoutes')
 const userRoutes = require('./routes/userRoutes');
@@ -81,17 +83,47 @@ const sessionConfig = {
 app.use(session(sessionConfig));
 app.use(flash());
 
-app.use((req, res, next) => {
+app.use(async (req, res, next) => {
     res.locals.currentUser = req.user;
     res.locals.success = req.flash('success');
     res.locals.error = req.flash('error');
+    /*
+    if (req.user) {
+        if (req.user.role === 'Consultant') {
+            const consultant = await Consultant.findOne({ userId: req.user._id });
+            res.locals.consultant = consultant;
+        } else if (req.user.role === 'Client') {
+            const client = await Client.findOne({ userId: req.user._id });
+            res.locals.client = client;
+        }
+    } else {
+        // If no user is logged in, set both client and consultant to null
+        res.locals.client = null;
+        res.locals.consultant = null;
+    }*/
+
+    if (req.user) {
+        if (req.user.role === 'Consultant') {
+            const consultant = await Consultant.findOne({ userId: req.user._id });
+            res.locals.consultant = consultant;
+        } else if (req.user.role === 'Client') {
+            const client = await Client.findOne({ userId: req.user._id });
+            res.locals.client = client;
+        }
+    } else {
+        // If no user is logged in, set both client and consultant to null
+        res.locals.client = null;
+        res.locals.consultant = null;
+    }
+
     next();
-})
+});
+
 
 // Handle Routes
 app.use('/', homeRoutes)
 app.use('/user', userRoutes);
-app.use('/clients', clientRoutes);
+app.use('/client', clientRoutes);
 app.use('/consultant', consultantRoutes);
 app.use('/consultation', consultationRoutes);
 app.use('/services', serviceRoutes);

@@ -5,7 +5,13 @@ const Client = require('../models/clientModel')
 const userControllers = {
     // Register Page
     renderRegister: (req, res) => {
-        res.render('user/register')
+        try {
+            const user = req.user;
+            if (user) return res.redirect('/');
+            return res.status(200).render('user/register');
+        } catch (err) {
+            res.status(500).send(err);
+        }
     },
     // Post Register
     registerUser: async (req, res, next) => {
@@ -16,15 +22,23 @@ const userControllers = {
             req.login(user, err => {
                 if (err) return next(err);
                 console.log(user)
-                res.json({ message: 'User registered successfully', user })
+                res.redirect('/');
             })
         } catch (err) {
-            res.json({ message: err.message })
+            req.flash('error', err.message);
+            console.log(err);
+            res.redirect('/user/register')
         }
     },
     // Login Page
     renderLogin: (req, res) => {
-        res.render('user/login')
+        try {
+            const user = req.user;
+            if (user) return res.redirect('/');
+            return res.status(200).render('user/login')
+        } catch (err) {
+            res.status(500).json(err)
+        }
     },
     // Post Login
     loginUser: async (req, res) => {

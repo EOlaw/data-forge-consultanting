@@ -15,7 +15,7 @@ router.route('/:id/edit')
     .get(isAuthenticated, isAuthorizedAsConsultant, consultantControllers.renderUpdateForm);
 
 router.route('/:id')
-    .get(isAuthenticated, isAuthorizedAsConsultant, consultantControllers.getConsultant)
+    .get(isAuthenticated, consultantControllers.getConsultant)
     .put(isAuthenticated, isAuthorizedAsConsultant,consultantControllers.updateConsultant)
     .delete(isAuthenticated, isAuthorizedAsConsultant,consultantControllers.deleteConsultant)
 
