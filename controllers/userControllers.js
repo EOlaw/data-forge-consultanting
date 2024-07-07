@@ -16,18 +16,25 @@ const userControllers = {
     // Post Register
     registerUser: async (req, res, next) => {
         try {
-            const user = new User(req.body);
-            await user.setPassword(req.body.password); //Use setPassword method provided by passport-local-mongoose to set the password
-            await user.save();
-            req.login(user, err => {
-                if (err) return next(err);
-                console.log(user)
-                res.redirect('/');
-            })
-        } catch (err) {
-            req.flash('error', err.message);
-            console.log(err);
-            res.redirect('/user/register')
+            const { role, ...userData } = req.body;
+            // Save the basic user data first
+            const newUser = await User.create(userData);
+    
+            // Add user ID to request body
+            req.body.userId = newUser._id;
+    
+            if (role === 'client') {
+                // Redirect to clientController: createClient
+                await clientController.createClient(req, res);
+            } else if (role === 'consultant') {
+                // Redirect to consultantController: createConsultant
+                await consultantController.createConsultant(req, res);
+            } else {
+                // If role is not recognized, send an error response
+                res.status(400).send('Invalid role selected');
+            }
+        } catch (error) {
+            res.status(500).send('Error registering user: ' + error.message);
         }
     },
     // Login Page

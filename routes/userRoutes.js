@@ -8,40 +8,21 @@ const { isAuthenticated, isAdmin, isAuthorizedAsConsultant, isAuthorizedAsClient
 // User Profile
 router.route('/register')
     .post(userControllers.registerUser)
-    .get(userControllers.renderRegister)
+    .get(userControllers.renderRegister);
 
 router.route('/login')
    .post(passport.authenticate('local', { failureFlash: true, failureRedirect: '/user/login' }), userControllers.loginUser)
    .get(userControllers.renderLogin);
 
 router.route('/logout')
-    .get(isAuthenticated, userControllers.logout)
+    .get(isAuthenticated, userControllers.logout);
 
 router.route('/')
-    .get( userControllers.getUsers)
+    .get(userControllers.getUsers);
 
 router.route('/:id')
     .get(isAuthenticated, userControllers.getUser)
     .put(isAuthenticated, userControllers.updateUserAccount)
-    .delete(isAuthenticated, userControllers.deleteUserAccount)
-
-/*
-// Password Reset
-router.route('/request-rest')
-    .post(userControllers.requestPasswordReset)
-router.route('/reset-password')
-    .post(userControllers.resetPassword)
-
-
-router.route('/enable-2fa')
-    .post(isAuthenticated, userControllers.enableTwoFactor)
-router.route('/verify-2fa')
-    .post(isAuthenticated, userControllers.verifyTwoFactor)
-
-router.route('/activate-subscription')
-    .post(isAuthenticated, userControllers.activateSubscription)
-router.route('/subscription-status')
-    .get(isAuthenticated, userControllers.checkSubscriptionStatus)
-*/
+    .delete(isAuthenticated, userControllers.deleteUserAccount);
 
 module.exports = router;

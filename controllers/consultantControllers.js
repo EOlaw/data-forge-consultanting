@@ -10,14 +10,15 @@ const consultantControllers = {
     // Create a new consultant profile
     createConsultant: async (req, res) => {
         try {
-            const user = await User.findById(req.body.userId);
-            if (!user) return res.status(404).render('error', { message: 'User not found' });
-            if (user.role !== 'Consultant') return res.status(403).render('error', { message: 'Only users with the role of "Consultant" can create consultant profiles' });
-            const consultant = new Consultant(req.body);
-            await consultant.save();
-            res.redirect(`/consultant/${consultant._id}`);
-        } catch (err) {
-            res.status(400).render('error', { message: err.message });
+            const { userId, ...consultantProfile } = req.body;
+            // Create consultant profile with userId
+            const consultantData = { userId, ...consultantProfile };
+            await Consultant.create(consultantData);
+    
+            // Redirect to consultant profile page or send a success response
+            res.redirect('/consultant/profile');
+        } catch (error) {
+            res.status(500).send('Error creating consultant profile: ' + error.message);
         }
     },
 

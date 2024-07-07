@@ -12,7 +12,7 @@
         <li><a class="nav-link scrollto" href="/team">Team</a></li>
         <li><a class="nav-link scrollto" href="/contact">Contact</a></li>
         
-        <% if (currentUser.role === 'Consultant') { %>
+        <% if (currentUser.role === 'consultant') { %>
           <li><a href="/consultant/<%= consultant._id %>" class="nav-link scrollto">Consultant Portal</a></li>
           <li class="dropdown"><a href="#"><span>Welcome to DF, <%= currentUser.firstname %></span> <i class="bi bi-chevron-down"></i></a>
             <ul>
@@ -30,7 +30,7 @@
             </ul>
           </li>
         <% } %>
-        <% if (currentUser.role === 'Client') { %>
+        <% if (currentUser.role === 'client') { %>
           <li><a href="/client/<%= client._id %>" class="nav-link scrollto">Client Portal</a></li>
           <li class="dropdown"><a href="#"><span>Welcome to DF, <%= currentUser.firstname %></span> <i class="bi bi-chevron-down"></i></a>
             <ul>

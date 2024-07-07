@@ -9,19 +9,15 @@ const clientControllers = {
     // Create a new client
     createClient: async (req, res) => {
         try {
-            // Find user by userId
-            const user = await User.findById(req.body.userId);
-            if (!user) return res.status(404).render('error', { message: 'User not found' });
-            // Check if user has the role of 'Client'
-            if (user.role !== 'Client') return res.status(403).render({ error: 'Only users with the role of "Client" can create client profiles' });
-            // Create a new client profile
-            const client = new Client(req.body);
-            await client.save();
-            console.log('Client profile created:', client); // Log the created client
-            res.redirect(`/client/${client._id}`)
-        } catch (err) {
-            console.error('Error creating client profile:', err); // Log the error
-            res.status(400).json({ error: err.message });
+            const { userId, ...clientProfile } = req.body;
+            // Create client profile with userId
+            const clientData = { userId, ...clientProfile };
+            await Client.create(clientData);
+    
+            // Redirect to client profile page or send a success response
+            res.redirect('/client/profile');
+        } catch (error) {
+            res.status(500).send('Error creating client profile: ' + error.message);
         }
     },
     // Get all clients
